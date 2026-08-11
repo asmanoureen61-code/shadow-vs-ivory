@@ -11,6 +11,11 @@ function ac(): AudioContext | null {
   return ctx;
 }
 
+/** Shared context accessor so other audio modules (e.g. music) reuse the same node graph. */
+export function getAudioContext(): AudioContext | null {
+  return ac();
+}
+
 type Tone = { freq: number; dur: number; type?: OscillatorType; gain?: number; slideTo?: number };
 
 export function tone({ freq, dur, type = "square", gain = 0.06, slideTo }: Tone) {
@@ -53,11 +58,57 @@ export const sfx = {
   punch: () => noise(0.08, 0.05),
   kick: () => noise(0.12, 0.06),
   knee: () => tone({ freq: 200, dur: 0.1, type: "sawtooth", slideTo: 90, gain: 0.05 }),
-  hit: () => tone({ freq: 240, dur: 0.1, type: "square", slideTo: 120, gain: 0.045 }),
+  propBreak: () => {
+    noise(0.1, 0.04);
+    tone({ freq: 220, dur: 0.08, type: "triangle", slideTo: 90, gain: 0.035 });
+  },
+  explode: () => {
+    noise(0.22, 0.07);
+    tone({ freq: 120, dur: 0.2, type: "sawtooth", slideTo: 40, gain: 0.06 });
+    setTimeout(() => tone({ freq: 80, dur: 0.18, type: "triangle", slideTo: 35, gain: 0.04 }), 50);
+  },
+  /** Light melee / small tick. */
+  hit: () => tone({ freq: 240, dur: 0.08, type: "square", slideTo: 120, gain: 0.04 }),
+  hitLight: () => {
+    tone({ freq: 320, dur: 0.06, type: "triangle", slideTo: 180, gain: 0.035 });
+    noise(0.04, 0.02);
+  },
+  hitHeavy: () => {
+    tone({ freq: 160, dur: 0.12, type: "sawtooth", slideTo: 70, gain: 0.055 });
+    noise(0.1, 0.045);
+  },
+  hitGun: () => {
+    tone({ freq: 480, dur: 0.05, type: "square", slideTo: 200, gain: 0.03 });
+    noise(0.05, 0.025);
+  },
+  hitKill: () => {
+    tone({ freq: 280, dur: 0.14, type: "triangle", slideTo: 90, gain: 0.05 });
+    setTimeout(() => tone({ freq: 160, dur: 0.16, type: "sawtooth", slideTo: 60, gain: 0.04 }), 40);
+    noise(0.12, 0.04);
+  },
+  bulletImpact: () => {
+    tone({ freq: 520, dur: 0.04, type: "square", slideTo: 160, gain: 0.025 });
+    noise(0.05, 0.02);
+  },
   playerHurt: () => tone({ freq: 180, dur: 0.18, type: "sawtooth", slideTo: 70, gain: 0.05 }),
   defeat: () => tone({ freq: 320, dur: 0.3, type: "triangle", slideTo: 80, gain: 0.05 }),
   jump: () => tone({ freq: 420, dur: 0.1, type: "sine", slideTo: 700, gain: 0.04 }),
   dash: () => noise(0.16, 0.03),
+  focus: () => {
+    tone({ freq: 520, dur: 0.12, type: "sine", gain: 0.045 });
+    setTimeout(() => tone({ freq: 780, dur: 0.18, type: "triangle", slideTo: 420, gain: 0.04 }), 70);
+  },
+  perfectDodge: () => {
+    tone({ freq: 880, dur: 0.08, type: "sine", gain: 0.05 });
+    setTimeout(() => tone({ freq: 1320, dur: 0.12, type: "triangle", slideTo: 660, gain: 0.04 }), 60);
+    noise(0.1, 0.025);
+  },
+  finisher: () => {
+    tone({ freq: 180, dur: 0.1, type: "sawtooth", slideTo: 90, gain: 0.055 });
+    setTimeout(() => tone({ freq: 520, dur: 0.12, type: "square", slideTo: 220, gain: 0.045 }), 50);
+    setTimeout(() => noise(0.16, 0.06), 80);
+    setTimeout(() => tone({ freq: 980, dur: 0.1, type: "sine", gain: 0.04 }), 140);
+  },
   pickup: () => {
     tone({ freq: 660, dur: 0.08, type: "sine" });
     setTimeout(() => tone({ freq: 990, dur: 0.12, type: "sine" }), 80);
