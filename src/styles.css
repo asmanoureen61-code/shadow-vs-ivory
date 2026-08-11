@@ -1348,123 +1348,127 @@
 
 .mobile-pad {
   position: absolute;
-  bottom: max(10px, env(safe-area-inset-bottom));
+  bottom: max(8px, env(safe-area-inset-bottom));
   display: flex;
   flex-direction: column;
-  gap: 0.45rem;
+  gap: clamp(0.2rem, 1vw, 0.35rem);
   pointer-events: auto;
 }
 
 .mobile-pad--move {
-  left: max(10px, env(safe-area-inset-left));
+  left: max(8px, env(safe-area-inset-left));
   align-items: center;
 }
 
 .mobile-pad--actions {
-  right: max(10px, env(safe-area-inset-right));
-  display: grid;
-  grid-template-columns: repeat(2, minmax(52px, 68px));
-  gap: 0.45rem;
-  align-items: end;
+  right: max(8px, env(safe-area-inset-right));
+  display: flex;
+  align-items: flex-end;
+  gap: clamp(0.3rem, 1.6vw, 0.5rem);
 }
 
 .mc-move-row {
   display: flex;
-  gap: 0.45rem;
+  gap: clamp(0.2rem, 1vw, 0.35rem);
+}
+
+/* Compact melee/utility cluster: stacked pills above two rows of small buttons. */
+.mc-cluster {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(0.18rem, 0.9vw, 0.3rem);
+}
+
+.mc-cluster-row {
+  display: flex;
+  gap: clamp(0.18rem, 0.9vw, 0.3rem);
 }
 
 .mc-btn {
   display: grid;
   place-items: center;
-  width: clamp(52px, 12vw, 68px);
-  height: clamp(52px, 12vw, 68px);
+  width: clamp(34px, 7.6vw, 44px);
+  height: clamp(34px, 7.6vw, 44px);
   margin: 0;
   padding: 0;
   border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.28);
-  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(0, 0, 0, 0.3);
   color: #f4f4f4;
-  font-size: 0.62rem;
+  font-size: 0.52rem;
   font-weight: 800;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.04em;
   line-height: 1.1;
   text-align: center;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 8px 20px -12px rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 6px 16px -10px rgba(0, 0, 0, 0.75);
   touch-action: none;
   user-select: none;
   -webkit-user-select: none;
   cursor: pointer;
-  transition: transform 0.12s ease, background-color 0.12s ease, border-color 0.12s ease, box-shadow 0.12s ease;
+  transition: transform 0.12s ease, background-color 0.12s ease, border-color 0.12s ease, box-shadow 0.12s ease, opacity 0.12s ease;
 }
 
+/* Secondary tier — melee/dodge/weapon: smallest & most transparent so gameplay stays visible. */
+.mc-btn--util {
+  width: clamp(30px, 6.6vw, 38px);
+  height: clamp(30px, 6.6vw, 38px);
+  font-size: 0.46rem;
+  background: rgba(0, 0, 0, 0.24);
+  opacity: 0.82;
+}
+
+/* Primary tier — movement: essential, slightly larger than secondary actions. */
 .mc-btn--dir {
-  font-size: 1.15rem;
+  width: clamp(38px, 8.6vw, 48px);
+  height: clamp(38px, 8.6vw, 48px);
+  font-size: 1rem;
   letter-spacing: 0;
 }
 
-.mc-btn--action {
-  width: clamp(56px, 13vw, 72px);
-  height: clamp(56px, 13vw, 72px);
+/* Primary tier pills — special/finisher: wide & short to save vertical space. */
+.mc-btn--pill {
+  width: clamp(58px, 15vw, 78px);
+  height: clamp(24px, 5.6vw, 30px);
+  border-radius: 999px;
+  font-size: 0.48rem;
 }
 
+/* Most important action — shooting: largest, clearest bullet icon. */
 .mc-fire {
-  background: rgba(0, 0, 0, 0.55);
-  border-color: rgba(255, 255, 255, 0.4);
-}
-
-.mc-btn--dodge {
-  width: clamp(48px, 11vw, 58px);
-  height: clamp(48px, 11vw, 58px);
-  font-size: 0.55rem;
-  grid-column: 1 / 2;
-  justify-self: center;
-}
-
-.mc-btn--weapon {
-  width: clamp(48px, 11vw, 58px);
-  height: clamp(48px, 11vw, 58px);
-  font-size: 0.52rem;
-  grid-column: 2 / 3;
-  justify-self: center;
+  width: clamp(46px, 10.4vw, 58px);
+  height: clamp(46px, 10.4vw, 58px);
+  background: rgba(0, 0, 0, 0.4);
+  border-color: rgba(255, 255, 255, 0.3);
 }
 
 .mc-btn--finisher {
-  width: clamp(52px, 12vw, 64px);
-  height: clamp(52px, 12vw, 64px);
-  font-size: 0.52rem;
-  grid-column: 1 / -1;
-  justify-self: center;
   opacity: 1;
-  border-color: rgba(255, 255, 255, 0.55);
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.25), 0 0 16px rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.22), 0 0 12px rgba(255, 255, 255, 0.16);
   background: rgba(255, 255, 255, 0.14);
 }
 
 .mc-btn--finisher.ult {
   background: rgba(255, 240, 200, 0.22);
-  border-color: rgba(255, 230, 160, 0.65);
+  border-color: rgba(255, 230, 160, 0.6);
 }
 
 .mc-btn--special {
-  width: clamp(52px, 12vw, 64px);
-  height: clamp(52px, 12vw, 64px);
-  font-size: 0.55rem;
-  grid-column: 1 / -1;
-  justify-self: center;
-  opacity: 0.55;
+  opacity: 0.5;
 }
 
 .mc-btn--special.ready {
   opacity: 1;
-  border-color: rgba(255, 255, 255, 0.55);
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.25), 0 0 16px rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.22), 0 0 12px rgba(255, 255, 255, 0.16);
 }
 
 .mc-btn--special.focus {
   opacity: 1;
-  background: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .mc-btn--special:disabled {
@@ -1478,6 +1482,7 @@
 .mc-btn[data-active="1"],
 .mc-btn:active {
   transform: scale(0.92);
+  opacity: 1;
   background: rgba(255, 255, 255, 0.18);
   border-color: rgba(255, 255, 255, 0.7);
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.25), 0 0 18px rgba(255, 255, 255, 0.12);
@@ -1485,22 +1490,39 @@
 
 .mobile-rotate-hint {
   position: absolute;
-  left: 50%;
-  top: 50%;
-  z-index: 6;
-  translate: -50% -50%;
-  width: min(88%, 22rem);
-  padding: 0.85rem 1rem;
-  border-radius: 0.75rem;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.9rem;
+  padding: 2rem;
   text-align: center;
-  font-size: 0.85rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
+  background: rgba(5, 7, 10, 0.94);
+  backdrop-filter: blur(6px);
+  pointer-events: auto;
+  touch-action: none;
+}
+
+.mobile-rotate-hint-icon {
+  font-size: 2.6rem;
+  line-height: 1;
   color: #f2f2f2;
-  background: rgba(0, 0, 0, 0.62);
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  backdrop-filter: blur(10px);
-  pointer-events: none;
+  animation: rotate-hint-spin 1.6s ease-in-out infinite;
+}
+
+.mobile-rotate-hint-text {
+  max-width: 18rem;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #f2f2f2;
+}
+
+@keyframes rotate-hint-spin {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(-90deg); }
 }
 
 @media (orientation: landscape) and (max-height: 480px) {
@@ -1509,14 +1531,30 @@
     width: min(420px, 70%);
   }
 
+  /* Very short landscape viewports: shrink further to maximize visible gameplay. */
   .mc-btn {
-    width: clamp(48px, 10vh, 60px);
-    height: clamp(48px, 10vh, 60px);
+    width: clamp(30px, 7.2vh, 40px);
+    height: clamp(30px, 7.2vh, 40px);
   }
 
-  .mc-btn--action {
-    width: clamp(52px, 11vh, 64px);
-    height: clamp(52px, 11vh, 64px);
+  .mc-btn--util {
+    width: clamp(26px, 6.2vh, 34px);
+    height: clamp(26px, 6.2vh, 34px);
+  }
+
+  .mc-btn--dir {
+    width: clamp(34px, 8vh, 44px);
+    height: clamp(34px, 8vh, 44px);
+  }
+
+  .mc-btn--pill {
+    width: clamp(52px, 13vh, 70px);
+    height: clamp(22px, 5.2vh, 27px);
+  }
+
+  .mc-fire {
+    width: clamp(40px, 9.6vh, 52px);
+    height: clamp(40px, 9.6vh, 52px);
   }
 }
 
@@ -1533,6 +1571,10 @@
 @media (prefers-reduced-motion: reduce) {
   .mc-btn {
     transition: none;
+  }
+
+  .mobile-rotate-hint-icon {
+    animation: none;
   }
 }
 

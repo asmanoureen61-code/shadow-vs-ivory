@@ -13,6 +13,16 @@ type Props = {
 type HoldAction = "left" | "right" | "up" | "shift" | "fire";
 type TapAction = "punch" | "kick" | "knee" | "dodge" | "special" | "nextWeapon" | "finisher";
 
+/** Lightweight inline SVG bullet/cartridge glyph — no icon-library dependency needed. */
+function BulletIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="52%" height="52%" fill="currentColor" aria-hidden="true">
+      <path d="M12 1.3c2.1 2.4 3 4.6 3 7.2v12.7c0 .8-.7 1.5-1.5 1.5h-3c-.8 0-1.5-.7-1.5-1.5V8.5c0-2.6.9-4.8 3-7.2Z" />
+      <rect x="8.2" y="9.9" width="7.6" height="1.5" opacity="0.55" />
+    </svg>
+  );
+}
+
 /**
  * On-screen D-pad + action pads for touch devices.
  * Updates the engine shared input map via game.setHeld / game.tap — no React input state per frame.
@@ -137,42 +147,48 @@ export default function MobileControls({
       </div>
 
       <div className="mobile-pad mobile-pad--actions">
-        <button type="button" className="mc-btn mc-btn--action mc-fire" aria-label="Fire" {...bindHold("fire")}>
-          FIRE
-        </button>
-        <button type="button" className="mc-btn mc-btn--action" aria-label="Punch" {...bindTap("punch")}>
-          PUNCH
-        </button>
-        <button type="button" className="mc-btn mc-btn--action" aria-label="Kick" {...bindTap("kick")}>
-          KICK
-        </button>
-        <button type="button" className="mc-btn mc-btn--action" aria-label="Knee" {...bindTap("knee")}>
-          KNEE
-        </button>
-        <button type="button" className="mc-btn mc-btn--dodge" aria-label="Dodge" {...bindTap("dodge")}>
-          DODGE
-        </button>
-        <button type="button" className="mc-btn mc-btn--weapon" aria-label="Switch weapon" {...bindTap("nextWeapon")}>
-          WEAPON
-        </button>
-        {finisherReady && (
+        <div className="mc-cluster">
+          {finisherReady && (
+            <button
+              type="button"
+              className={`mc-btn mc-btn--pill mc-btn--finisher${finisherTier >= 2 ? " ult" : ""}`}
+              aria-label={finisherTier >= 2 ? "Ultimate finisher" : "Finisher"}
+              {...bindTap("finisher")}
+            >
+              {finisherTier >= 2 ? "ULT" : "FIN"}
+            </button>
+          )}
           <button
             type="button"
-            className={`mc-btn mc-btn--finisher${finisherTier >= 2 ? " ult" : ""}`}
-            aria-label={finisherTier >= 2 ? "Ultimate finisher" : "Finisher"}
-            {...bindTap("finisher")}
+            className={`mc-btn mc-btn--pill mc-btn--special${specialReady ? " ready" : ""}${focusActive ? " focus" : ""}`}
+            aria-label="Special Focus"
+            aria-disabled={!specialReady}
+            {...bindTap("special")}
           >
-            {finisherTier >= 2 ? "ULT" : "FINISH"}
+            {focusActive ? "FOCUS" : "SPEC"}
           </button>
-        )}
-        <button
-          type="button"
-          className={`mc-btn mc-btn--special${specialReady ? " ready" : ""}${focusActive ? " focus" : ""}`}
-          aria-label="Special Focus"
-          aria-disabled={!specialReady}
-          {...bindTap("special")}
-        >
-          {focusActive ? "FOCUS" : "SPECIAL"}
+          <div className="mc-cluster-row">
+            <button type="button" className="mc-btn mc-btn--util" aria-label="Punch" {...bindTap("punch")}>
+              PU
+            </button>
+            <button type="button" className="mc-btn mc-btn--util" aria-label="Kick" {...bindTap("kick")}>
+              KI
+            </button>
+            <button type="button" className="mc-btn mc-btn--util" aria-label="Knee" {...bindTap("knee")}>
+              KN
+            </button>
+          </div>
+          <div className="mc-cluster-row">
+            <button type="button" className="mc-btn mc-btn--util" aria-label="Dodge" {...bindTap("dodge")}>
+              DG
+            </button>
+            <button type="button" className="mc-btn mc-btn--util" aria-label="Switch weapon" {...bindTap("nextWeapon")}>
+              WP
+            </button>
+          </div>
+        </div>
+        <button type="button" className="mc-btn mc-fire" aria-label="Fire" {...bindHold("fire")}>
+          <BulletIcon />
         </button>
       </div>
     </div>

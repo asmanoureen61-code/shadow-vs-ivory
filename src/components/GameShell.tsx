@@ -24,6 +24,12 @@ import { ACHIEVEMENTS, readUnlocked, type AchievementId } from "@/game/achieveme
 
 type Screen = "menu" | "levels" | "upgrades" | "achievements" | "play" | "complete" | "gameover" | "victory";
 
+/** Screen Orientation lock/unlock aren't in the standard TS DOM lib yet — widely supported on Chromium/Android. */
+type LockableOrientation = ScreenOrientation & {
+  lock?: (orientation: "landscape" | "portrait" | "any" | "natural") => Promise<void>;
+  unlock?: () => void;
+};
+
 const STORE_KEY = "shadow-vs-ivory-progress";
 
 const emptyHud: HudState = {
@@ -94,12 +100,45 @@ export default function GameShell() {
     };
   }, [screen]);
 
-  // Exit OS fullscreen when leaving gameplay.
+  // Exit OS fullscreen + release the orientation lock when leaving gameplay.
   useEffect(() => {
-    if (screen !== "play" && typeof document !== "undefined" && document.fullscreenElement) {
+    if (screen === "play") return;
+    if (typeof document !== "undefined" && document.fullscreenElement) {
       void document.exitFullscreen();
     }
+    if (typeof window !== "undefined") {
+      (window.screen.orientation as LockableOrientation | undefined)?.unlock?.();
+    }
   }, [screen]);
+
+  // Mobile gameplay: try to go fullscreen + lock to landscape. Desktop is untouched
+  // (guarded by showTouchControls, same coarse-pointer signal used for touch UI).
+  // Best-effort only — unsupported/rejected attempts fall back to the rotate hint.
+  useEffect(() => {
+    if (screen !== "play" || !showTouchControls) return;
+    if (typeof window === "undefined" || typeof document === "undefined") return;
+    let cancelled = false;
+    const tryLockLandscape = async () => {
+      try {
+        if (frameRef.current && !document.fullscreenElement) {
+          await frameRef.current.requestFullscreen();
+        }
+      } catch {
+        // Fullscreen rejected (no user gesture, unsupported, etc). Continue anyway —
+        // orientation lock can still work on some browsers without fullscreen.
+      }
+      if (cancelled) return;
+      try {
+        await (window.screen.orientation as LockableOrientation | undefined)?.lock?.("landscape");
+      } catch {
+        // Orientation Lock API unsupported/rejected — the rotate hint covers this.
+      }
+    };
+    void tryLockLandscape();
+    return () => {
+      cancelled = true;
+    };
+  }, [screen, showTouchControls]);
 
   const chooseDifficulty = useCallback((d: Difficulty) => {
     writeDifficulty(d);
@@ -182,8 +221,10 @@ export default function GameShell() {
   }, [screen, levelIndex, stop]);
 
   useEffect(() => {
-    gameRef.current?.setPaused(paused);
-  }, [paused]);
+    // Freeze the engine while the rotate-to-landscape hint blocks the screen, without
+    // surfacing the manual Pause overlay for it.
+    gameRef.current?.setPaused(paused || (showTouchControls && isPortrait));
+  }, [paused, showTouchControls, isPortrait]);
 
   useEffect(() => {
     if (screen !== "play") return;
@@ -287,7 +328,7 @@ export default function GameShell() {
             )}
             <MobileControls
               gameRef={gameRef}
-              enabled={showTouchControls && !paused}
+              enabled={showTouchControls && !paused && !isPortrait}
               specialReady={specialReady}
               focusActive={hud.focusActive}
               finisherReady={hud.finisherReady}
@@ -295,7 +336,8 @@ export default function GameShell() {
             />
             {showTouchControls && isPortrait && (
               <div className="mobile-rotate-hint" role="status">
-                Rotate your device for the best experience
+                <span className="mobile-rotate-hint-icon" aria-hidden="true">⟳</span>
+                <span className="mobile-rotate-hint-text">Rotate your phone to play.</span>
               </div>
             )}
             {paused && (
@@ -646,11 +688,6 @@ export default function GameShell() {
           </div>
         )}
       </div>
-      {screen !== "play" && (
-        <p className="footnote">
-          Best played on desktop with a keyboard. Shadow and Ivory are fictional factions distinguished only by outfit colour.
-        </p>
-      )}
     </div>
   );
 }
