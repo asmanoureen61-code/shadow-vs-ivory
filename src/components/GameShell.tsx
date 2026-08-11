@@ -11,17 +11,6 @@ const emptyHud: HudState = {
   wave: 1, waves: 1, bossHp: null, combo: 0,
 };
 
-const CONTROLS: [string, string][] = [
-  ["←  →", "Move"],
-  ["↑", "Jump"],
-  ["Space", "Fire handgun"],
-  ["A", "Punch"],
-  ["S", "Kick"],
-  ["D", "Knee strike"],
-  ["Shift", "Sprint / Dash"],
-  ["R", "Reload"],
-  ["P / Esc", "Pause"],
-];
 
 export default function GameShell() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -138,11 +127,6 @@ export default function GameShell() {
               <div className="overlay">
                 <div className="panel">
                   <h2>Paused</h2>
-                  <div className="controls-grid">
-                    {CONTROLS.map(([k, v]) => (
-                      <div key={k} className="ctrl"><kbd>{k}</kbd><span>{v}</span></div>
-                    ))}
-                  </div>
                   <div className="panel-actions">
                     <button className="btn" onClick={() => setPaused(false)}>Resume</button>
                     <button className="btn btn-ghost" onClick={() => { setPaused(false); startLevel(levelIndex); }}>Restart level</button>
@@ -165,11 +149,6 @@ export default function GameShell() {
             <div className="panel-actions">
               <button className="btn btn-lg" onClick={() => startLevel(0)}>Start game</button>
               <button className="btn btn-ghost btn-lg" onClick={() => setScreen("levels")}>Level select</button>
-            </div>
-            <div className="controls-grid controls-menu">
-              {CONTROLS.map(([k, v]) => (
-                <div key={k} className="ctrl"><kbd>{k}</kbd><span>{v}</span></div>
-              ))}
             </div>
           </div>
         )}
