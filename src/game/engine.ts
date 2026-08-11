@@ -96,9 +96,9 @@ abstract class Fighter {
   }
 
   hurtBoxOffsets(): { reach: number; y: number; h: number } {
-    if (this.attackKind === "kick") return { reach: 56, y: 46, h: 26 };
-    if (this.attackKind === "knee") return { reach: 40, y: 40, h: 24 };
-    return { reach: 48, y: 56, h: 22 };
+    if (this.attackKind === "kick") return { reach: 64, y: 54, h: 30 };
+    if (this.attackKind === "knee") return { reach: 46, y: 48, h: 28 };
+    return { reach: 54, y: 66, h: 26 };
   }
   attackRect(): Rect | null {
     if (this.attackT <= 0) return null;
@@ -120,10 +120,10 @@ class Player extends Fighter {
 }
 
 const ENEMY_STATS: Record<EnemyKind, { hp: number; speed: number; dmg: number; w: number; h: number; score: number }> = {
-  grunt: { hp: 45, speed: 1.6, dmg: 6, w: 32, h: 74, score: 100 },
-  brute: { hp: 90, speed: 1.4, dmg: 10, w: 40, h: 84, score: 200 },
-  elite: { hp: 140, speed: 2.2, dmg: 13, w: 36, h: 80, score: 350 },
-  boss: { hp: 900, speed: 2.0, dmg: 18, w: 56, h: 116, score: 2000 },
+  grunt: { hp: 45, speed: 1.6, dmg: 6, w: 38, h: 88, score: 100 },
+  brute: { hp: 90, speed: 1.4, dmg: 10, w: 46, h: 98, score: 200 },
+  elite: { hp: 140, speed: 2.2, dmg: 13, w: 42, h: 94, score: 350 },
+  boss: { hp: 900, speed: 2.0, dmg: 18, w: 62, h: 130, score: 2000 },
 };
 
 class Enemy extends Fighter {
@@ -197,7 +197,7 @@ export class Game {
     for (let i = 0; i < 26; i++) this.clouds.push({ x: this.rng() * W, y: 40 + this.rng() * 180, s: 0.6 + this.rng() * 1.2, sp: 0.08 + this.rng() * 0.12 });
     for (let i = 0; i < 18; i++) this.mountains.push({ x: (i * W) / 18 + this.rng() * 120, h: 140 + this.rng() * 160, w: 260 + this.rng() * 220 });
     for (let i = 0; i < 22; i++) this.hills.push({ x: (i * W) / 22 + this.rng() * 100, r: 120 + this.rng() * 160, c: this.rng() > 0.5 ? "#8fd694" : "#7ac98a" });
-    for (let i = 0; i < 34; i++) this.trees.push({ x: 60 + this.rng() * (W - 120), s: 0.7 + this.rng() * 0.7 });
+    for (let i = 0; i < 16; i++) this.trees.push({ x: 60 + this.rng() * (W - 120), s: 0.7 + this.rng() * 0.7 });
     for (let i = 0; i < 22; i++) this.rocks.push({ x: 60 + this.rng() * (W - 120), s: 0.6 + this.rng() * 0.8 });
     for (let i = 0; i < 50; i++) this.plants.push({ x: 40 + this.rng() * (W - 80), s: 0.6 + this.rng() * 0.8 });
     for (let i = 0; i < Math.max(2, Math.floor(W / 900)); i++) this.houses.push({ x: 300 + this.rng() * (W - 600), s: 0.8 + this.rng() * 0.5, hue: this.rng() });
@@ -812,7 +812,7 @@ export class Game {
     }
     // trees
     for (const t of this.trees) {
-      const x = t.x - cam;
+      const x = t.x - cam * 0.88;
       if (x < -140 || x > VIEW_W + 140) continue;
       const s = t.s;
       g.fillStyle = "rgba(30,60,40,0.14)";
