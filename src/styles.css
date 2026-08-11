@@ -304,21 +304,6 @@
   box-shadow: 0 0 0 1px oklch(0.24 0.03 250 / 0.18) inset;
 }
 
-.controls-grid {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 0.4rem; margin-top: 1rem; width: min(620px, 100%);
-}
-.controls-menu { margin-top: 1.6rem; }
-.ctrl {
-  display: flex; align-items: center; gap: 0.5rem; justify-content: flex-start;
-  padding: 0.35rem 0.6rem; border-radius: 12px;
-  background: oklch(1 0 0 / 0.6); font-size: 0.74rem; color: oklch(0.34 0.04 250);
-}
-kbd {
-  min-width: 42px; text-align: center; padding: 2px 6px; border-radius: 7px;
-  font-family: ui-monospace, monospace; font-size: 0.68rem; font-weight: 700;
-  background: var(--game-ink); color: var(--game-cream);
-}
 
 .level-grid {
   display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
