@@ -180,7 +180,7 @@ export class Game {
     const c = canvas.getContext("2d");
     if (!c) throw new Error("no 2d context");
     this.ctx = c;
-    this.level = LEVELS[levelIndex];
+    this.level = LEVELS[levelIndex] ?? LEVELS[0]!;
     this.player = new Player(120);
     this.pickups = [
       ...this.level.ammoPickups.map((p) => ({ ...p, kind: "ammo" as const, taken: false, bob: Math.random() * 6 })),
@@ -498,7 +498,7 @@ export class Game {
           en.vx *= 0.7;
           if (en.attackT === 0 && en.cooldown === 0) {
             const kinds: ("punch" | "kick" | "knee")[] = en.kind === "boss" && en.specialCd === 0 ? ["knee"] : ["punch", "kick"];
-            en.attackKind = kinds[Math.floor(Math.random() * kinds.length)];
+            en.attackKind = kinds[Math.floor(Math.random() * kinds.length)] ?? "punch";
             en.attackT = 20;
             en.attackHit = false;
             en.cooldown = Math.max(18, Math.round((70 - en.aggression * 26) / (en.reaction || 1)));
@@ -882,9 +882,10 @@ export class Game {
     for (const b of this.bullets) {
       g.strokeStyle = "rgba(255,214,120,0.5)";
       g.lineWidth = 3; g.lineCap = "round";
-      if (b.trail.length > 1) {
+      const t0 = b.trail[0];
+      if (t0) {
         g.beginPath();
-        g.moveTo(b.trail[0].x, b.trail[0].y);
+        g.moveTo(t0.x, t0.y);
         for (const t of b.trail) g.lineTo(t.x, t.y);
         g.lineTo(b.x, b.y);
         g.stroke();
