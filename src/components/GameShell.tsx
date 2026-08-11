@@ -169,9 +169,6 @@ export default function GameShell() {
                     <span className="level-num">{l.id}</span>
                     <b>{l.name}</b>
                     <span className="level-tag">{l.tagline}</span>
-                    <span className="level-diff">
-                      {["Easy", "Medium", "Hard", "Very hard", "Extreme"][i]}
-                    </span>
                     {locked && <span className="level-lock">Locked</span>}
                   </button>
                 );
