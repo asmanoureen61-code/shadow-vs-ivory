@@ -447,6 +447,48 @@
 
 .footnote { font-size: 0.7rem; color: oklch(0.42 0.03 250); text-align: center; max-width: 44rem; }
 
+/* ---------- Mobile: menu / level select / complete screens must scroll, never clip ----------
+   `.game-frame` is normally locked to the 960:600 gameplay aspect-ratio with overflow:hidden,
+   which is correct for actual gameplay but squashes non-gameplay screens (menu, level select,
+   upgrades, achievements, complete, game over, victory) into a short letterboxed strip on
+   narrow/tall phone viewports, clipping everything below the fold. On mobile, let the frame
+   size to its content (a normal flexbox column) instead of the fixed aspect ratio, so short
+   screens still center nicely and tall screens grow the page and scroll normally. Gameplay
+   (`.game-frame--play`) is untouched — its own fixed-viewport rules take precedence. */
+@media (max-width: 820px) {
+  .game-shell:not(.game-shell--play) {
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding:
+      max(1rem, env(safe-area-inset-top))
+      max(0.75rem, env(safe-area-inset-right))
+      max(1.5rem, env(safe-area-inset-bottom))
+      max(0.75rem, env(safe-area-inset-left));
+  }
+
+  .game-frame:not(.game-frame--play) {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    aspect-ratio: auto;
+    height: auto;
+    min-height: 100vh;
+    min-height: 100dvh;
+    max-height: none;
+    overflow: visible;
+  }
+
+  .game-frame:not(.game-frame--play) > .screen {
+    position: relative;
+    inset: auto;
+    flex: 1 0 auto;
+    height: auto;
+    overflow: visible;
+    padding-top: max(1.25rem, env(safe-area-inset-top));
+    padding-bottom: max(2rem, env(safe-area-inset-bottom));
+  }
+}
+
 /* ---------- Landing / home menu only (monochrome cinematic) ---------- */
 .game-shell--menu {
   --menu-black: oklch(0.12 0 0);
