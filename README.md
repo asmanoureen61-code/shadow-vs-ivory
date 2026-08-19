@@ -1,9 +1,9 @@
-# Nigga Fighters
+# Shadow Fighters
 
 Create a polished browser-based 2D action fighting/shooting game with smooth animations and responsive keyboard controls.
 
 GAME TITLE:
-Nigga Fighters
+Shadow Fighters
 
 CORE CONCEPT:
 The player controls a fictional fighter named "Shadow." Shadow wears a black tactical outfit. The enemies belong to a fictional faction called "Ivory" and wear white outfits.

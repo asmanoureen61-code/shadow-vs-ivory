@@ -388,7 +388,7 @@ export default function GameShell() {
               <span className="menu-fx-scan" />
             </div>
             <p className="eyebrow menu-enter menu-enter--1">VECTOR ARENA BRAWLER</p>
-            <h1 className="title menu-title menu-enter menu-enter--2">Nigga Fighters</h1>
+            <h1 className="title menu-title menu-enter menu-enter--2">Shadow Fighters</h1>
             <p className="lede menu-enter menu-enter--3">
               Black king, aura maxed, too locked in to ever switch lanes;
               Built different, no cap—turning every L into legendary gains.
